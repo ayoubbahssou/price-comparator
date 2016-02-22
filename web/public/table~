@@ -1,0 +1,52 @@
+  <div class="portlet-body">
+
+              <table class="table table-striped table-bordered table-hover" >
+              <thead>
+              <tr>
+                <th class="table-checkbox">
+                  <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes"/>
+                </th>
+                
+                <th>
+                    Id-Bill
+                </th>
+                <th>
+                   Month
+                </th>
+                <th>
+                   Year
+                </th>
+                <th>
+                   bill
+                </th>
+                <th>
+                   Status
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+                <% try {
+                    Class.forName("org.apache.derby.jdbc.ClientDriver").newInstance();
+                    Connection cnx=DriverManager.getConnection("jdbc:derby://localhost:1527/pcdb","pcdbun","pcdbpw");
+                    int idsupp=1;
+                    PreparedStatement stat=cnx.prepareStatement("SELECT idbill, month, years, bill, status, idsupp from bill where idsupp="+session.getAttribute("idsupp"));
+                    ResultSet rs=stat.executeQuery();
+                    while(rs.next()){ %>
+                        <tr>
+                            <td><input type="checkbox" class="checkboxes" value="1"/></td>
+                            <% String url="showBill.jsp?idbill="+rs.getString("idbill")+"&idsupp="+rs.getString("idsupp");%>
+                            <td><%= rs.getString("idbill") %></td>
+                            <td><%= rs.getString("month") %></td>
+                            <td><%= rs.getString("years") %></td>
+                            <td><a href="<%= url %>"><%= rs.getString("bill") %></a></td>
+                            <td><%= rs.getString("status") %></td>
+                        </tr>   
+                    <% } %> 
+                 <% }catch(Exception e){
+                    out.print(e);
+                    } 
+                %>
+              </tbody>
+              </table>
+            </div>
+          </div>
